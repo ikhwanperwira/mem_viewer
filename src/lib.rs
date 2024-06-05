@@ -14,7 +14,7 @@
 //! Then, in your Rust code, you can use the `view_mem!` macro to view the memory content of a variable. Here's an example:
 //!
 //! ```rust
-//! use mem_viewer::view_mem;
+//! use mem_viewer::*;
 //!
 //! let my_var: u32 = 69;
 //! view_mem!(my_var);
@@ -540,30 +540,35 @@ macro_rules! view_mem {
 
         // Print metadata of var: var_name, size, type, separated by a new line for each meta
         println!("Name: {}", stringify!($var));
-        print_type_of(&$var);
+        _print_type_of(&$var);
         println!("Size: {} bytes", size);
 
-        show_memory_content(&$var as *const _ as *const u8, size);
+        _show_memory_content(&$var as *const _ as *const u8, size);
     };
 }
 
 /// Prints the type of a variable.
 ///
+/// (This is supposed to be private usage!)
+/// 
 /// # Argument
 ///
 /// * `_: T` - The variable whose type needs to be printed.
-fn print_type_of<T>(_: T) {
+pub fn _print_type_of<T>(_: T) {
     let type_name = &std::any::type_name::<T>()[1..]; // Remove `&` at first character
     println!("Type: {}", type_name);
 }
 
 /// Displays the memory content of a given memory address.
 ///
+/// 
+/// (This is supposed to be private usage!)
+/// 
 /// # Arguments
 ///
 /// * `src_ptr` - The memory address to start displaying from.
 /// * `len` - The number of bytes to display.
-fn show_memory_content(src_ptr: *const u8, len: usize) {
+pub fn _show_memory_content(src_ptr: *const u8, len: usize) { // This supposed to be private usage.
     // Display the memory and its value for every byte from src_ptr to src_ptr + len
 
     // Output format: Address | Hexadecimal | Decimal | ASCII
