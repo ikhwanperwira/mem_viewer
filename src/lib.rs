@@ -516,7 +516,7 @@
 /// # Example
 ///
 /// ```rust
-/// let my_var: u32= 69;
+/// let my_var: u32 = 69;
 /// view_mem!(my_var);
 /// ```
 /// 
