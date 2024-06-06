@@ -8,7 +8,7 @@ Add the following line to your `Cargo.toml` file:
 
 ```toml
 [dependencies]
-mem_viewer = "0.1.2"
+mem_viewer = "0.1.3"
 ```
 
 Then, in your Rust code, you can use the `view_mem!` macro to view the memory content of a variable. Here's an example:
