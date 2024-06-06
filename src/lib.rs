@@ -591,16 +591,16 @@ pub fn _show_memory_content(src_ptr: *const u8, len: usize) { // This supposed t
                 ascii_display = (value as char).to_string();
             } else {
                 ascii_display = match value { // Non-graphic ASCII
-                    0 => "NUL",
-                    1 => "SOH",
-                    2 => "STX",
-                    3 => "ETX",
-                    4 => "EOT",
-                    5 => "ENQ",
-                    6 => "ACK",
-                    7 => "BEL",
-                    8 => "BS ",
-                    9 => "HT ",
+                    0  => "NUL",
+                    1  => "SOH",
+                    2  => "STX",
+                    3  => "ETX",
+                    4  => "EOT",
+                    5  => "ENQ",
+                    6  => "ACK",
+                    7  => "BEL",
+                    8  => "BS ",
+                    9  => "HT ",
                     10 => "LF ",
                     11 => "VT ",
                     12 => "FF ",
@@ -623,8 +623,9 @@ pub fn _show_memory_content(src_ptr: *const u8, len: usize) { // This supposed t
                     29 => "GS ",
                     30 => "RS ",
                     31 => "US ",
+                    32 => "SPC",
                     127 => "DEL",
-                    _ => "Err",
+                    _ => "UNK",
                 }
                 .to_string()
             }
