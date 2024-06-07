@@ -78,61 +78,114 @@ Contributions are welcome! If you find any issues or have any suggestions, pleas
 mod tests {
     use super::*;
 
+    /// Display the memopry content of a u16 variable.
+    fn view_mem_u16(my_u16: u16) -> () {
+        // Unsafe test
+        view_mem!(my_u16);
+
+        // Safe test
+        safe_view_mem!(&my_u16);
+    }
+
     /// Displays the memory content of a u64 variable.
     fn view_mem_u64(my_u64: u64) -> () {
+        // Unsafe test
         view_mem!(my_u64);
+
+        // Safe test
+        safe_view_mem!(&my_u64);
     }
 
     /// Displays the memory content of a f32 variable.
     fn view_mem_f32(my_f32: f32) -> () {
+        // Unsafe test
         view_mem!(my_f32);
+
+        // Safe test
+        safe_view_mem!(&my_f32);
     }
 
     /// Displays the memory content of a string variable.
     fn view_mem_str(my_str: &str) -> () {
+        // Unsafe test
         view_mem!(my_str); // Print address of the first character of the my_str
         view_mem!(*my_str); // Print actual content of my_str
+
+        // Safe test
+        safe_view_mem!(&my_str);
+        safe_view_mem!(my_str);
     }
 
-    /// Displays the memory content of a null pointer.
+    /// Displays the memory content of a pointer.
     fn view_mem_ptr<T>(my_ptr: *const T) -> () {
+        // Unsafe test
         view_mem!(my_ptr);
         unsafe { view_mem!(*my_ptr); }
+
+        // Safe test
+        // Parameterized type is not supported for safe view.
     }
 
     /// Displays the memory content of a vector variable.
     fn view_mem_vec<T>(my_vec: Vec<T>) -> () {
+        // Unsafe test
         view_mem!(my_vec);
         view_mem!(*my_vec);
+
+        // Safe test
+        // Parameterized type is not supported for safe view.
     }
 
     /// Displays the memory content of a boxed variable.
     fn view_mem_box<T>(my_box: Box<T>) -> () {
+        // Unsafe test
+        view_mem!(&my_box);
         view_mem!(my_box);
         view_mem!(*my_box);
+
+        // Safe test
+        // Parameterized type is not supported for safe view.
     }
 
     /// Displays the memory content of a vector of boxed variables.
     fn view_mem_vec_of_box<T>(my_vec_of_box: Vec<Box<T>>) -> () {
+        // Unsafe test
         view_mem!(my_vec_of_box);
         view_mem!(*my_vec_of_box);
         view_mem!(*my_vec_of_box[0]);
+
+        // Safe test
+        // Parameterized type is not supported for safe view.
     }
 
     /// Displays the memory content of a struct variable.
     fn view_mem_struct<T>(my_struct: T) -> () {
+        // Unsafe test
         view_mem!(&my_struct);
         view_mem!(my_struct);
-    }
 
-    #[allow(dead_code)]
+        // Parameterized type is not supported for safe view.
+    }
+     
     struct MyStruct {
         a: u8,
         b: u16,
         c: u32,
     }
 
+    #[derive(Serialize)]
+    struct MySerializedStruct {
+        a: u8,
+        b: u16,
+        c: u32,
+    }
+
     #[test]
+    fn u16_viewer() {
+        println!("This should print the memory of the holy number 69.\n");
+        assert_eq!(view_mem_u16(69), ());
+    }
+
     fn u64_viewer() {
         println!("This should print the memory of the holy number 69.\n");
         assert_eq!(view_mem_u64(69), ());
@@ -153,36 +206,72 @@ mod tests {
     #[test]
     fn ptr_viewer() {
         println!("This should print the memory of a pointer.\n");
-        assert_eq!(view_mem_ptr(&69), ());
+        let my_ptr: *const u8 = &69;
+
+        // Safe test
+        println!("Currently pointer type is not supported by safe view memory.\n");
+
+        // Unsafe test
+        assert_eq!(view_mem_ptr(my_ptr), ());
     }
 
     #[test]
     fn vec_viewer() {
         println!("This should print the memory address of the vector and the memory of its elements.\n");
-        assert_eq!(view_mem_vec(vec![69, 255, 254, 253, 70]), ());
+        let my_vec: Vec<u8> = vec![69, 255, 254, 253, 70];
+
+        // Safe test
+        safe_view_mem!(&my_vec);
+
+        // Unsafe test
+        assert_eq!(view_mem_vec(my_vec), ());
     }
 
     #[test]
     fn box_viewer() {
         println!("This should print the memory address of the box and the memory of its value.\n");
-        assert_eq!(view_mem_box(Box::new(69)), ());
+        let my_box: Box<u8> = Box::new(69);
+
+        // Safe test
+        safe_view_mem!(&my_box);
+
+
+        // Unsafe test
+        assert_eq!(view_mem_box(my_box), ());
     }
 
     #[test]
     fn vec_of_box_viewer() {
         println!("This should print the memory address of the vector of boxes and the memory of its elements.\n");
-        assert_eq!(view_mem_vec_of_box(vec![Box::new(69), Box::new(255), Box::new(254), Box::new(253), Box::new(70)]), ());
+        let my_vec_of_box: Vec<Box<u8>> = vec![Box::new(69), Box::new(255), Box::new(254), Box::new(253), Box::new(70)];
+
+        // Safe test
+        safe_view_mem!(&my_vec_of_box);
+
+        // Unsafe test
+        assert_eq!(view_mem_vec_of_box(my_vec_of_box), ());
     }
 
     #[test]
     fn struct_viewer() {
         println!("This should print the memory address of the struct and the memory of its fields.\n");
-        assert_eq!(view_mem_struct(
-            MyStruct {
-                a: 69,
-                b: 255,
-                c: 70,
-            }), ());
+        let my_struct = MyStruct {
+            a: 69,
+            b: 255,
+            c: 70,
+        };
+
+        let my_serialized_struct = MySerializedStruct {
+            a: 69,
+            b: 255,
+            c: 70,
+        };
+
+        // Safe test
+        safe_view_mem!(&my_serialized_struct);
+
+        // Unsafe test
+        assert_eq!(view_mem_struct(my_struct), ());
     }
 }
 ```
