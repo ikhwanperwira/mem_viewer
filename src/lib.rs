@@ -754,10 +754,10 @@ pub use serde::Serialize;
 /// # Output
 /// 
 /// ```none
-/// Name: &my_var
-/// Type: &u16
-/// Addr: 000000acf3bfdc86
-/// Size: 8 bytes
+/// Name          : &my_var
+/// Type          : &u16
+/// Addr          : 000000acf3bfdc86
+/// Size          : 8 bytes
 /// Container Ptr : 0000027f45f05290
 /// Container Len : 2
 ///      Address     | Hex | Dec |    Bin   | ASCII
@@ -876,10 +876,10 @@ macro_rules! safe_view_mem  {
 /// Type: u16
 /// Addr: 00000007f88fdc56
 /// Size: 2 bytes
-///      Address     | Hex | Dec |    Bin   | ASCII
-/// -------------------Memory Content-----------------
-///  00000007f88fdc56 | 45 | 069 | 01000101 |  E
-///  00000007f88fdc57 | 00 | 000 | 00000000 |  NUL
+///      Address      | Hex | Dec |    Bin   | ASCII
+/// ------------------Memory Content----------------
+///  00000007f88fdc56 | 45 | 069  | 01000101 |  E
+///  00000007f88fdc57 | 00 | 000  | 00000000 |  NUL
 /// ```
 macro_rules! view_mem {
     ($var: expr) => {
