@@ -8,7 +8,7 @@ Add the following line to your `Cargo.toml` file:
 
 ```toml
 [dependencies]
-mem_viewer = "0.2.2"
+mem_viewer = "0.2.3"
 ```
 
 Then, in your Rust code, you can use the `view_mem!` macro to view the memory content of a variable. Here's an example:
@@ -25,7 +25,7 @@ This will print the memory content of `my_var` to the console.
 ## Example Output
 
 ```none
-ame: my_var
+Name: my_var
 Type: u16
 Addr: 000000719ddfdce6
 Size: 2 bytes
@@ -48,12 +48,12 @@ safe_view_mem!(&my_var);
 
 ## Example Safe Output
 ```none
-Name          : &my_var
-Type          : &u16
-Addr          : 000000719ddfdce6
-Size          : 8 bytes
-Container Ptr : 00000260c1266610
-Container Len : 2
+Name         : &my_var
+Type         : &u16
+Addr         : 000000719ddfdce6
+Size         : 8 bytes
+Container Ptr: 00000260c1266610
+Container Len: 2
      Address     | Hex | Dec |    Bin   | ASCII
 ---------------Container Content---------------
 00000260c1266610 | 45  | 069 | 01000101 | E
