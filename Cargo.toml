@@ -11,4 +11,4 @@ categories = ["development-tools", "development-tools::debugging", "development-
 
 [dependencies]
 serde = { version = "*", features = ["derive"] }
-bincode = {version = "*"}
+bincode = {version = "1.3.3"}
