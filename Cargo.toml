@@ -1,6 +1,6 @@
 [package]
 name = "mem_viewer"
-version = "0.2.3"
+version = "0.2.4"
 edition = "2021"
 license = "MIT"
 description = "Memory Viewer is a Rust library that provides a macro and display the memory content of various types of variables. It allows users to view the name, type, size, and memory content of a variable in a formatted way. It supports viewing memory content of different data types including integers, floating-point numbers, strings, pointers, vectors, boxed variables, and structs."
