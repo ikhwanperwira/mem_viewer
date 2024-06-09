@@ -799,7 +799,7 @@ macro_rules! safe_view_mem  {
 			let dec = format!("{:03}", byte);
 			let bin = format!("{:08b}", byte);
 			let ascii = if byte.is_ascii_graphic() {
-				format!("{}  ", *byte as char)
+				format!(" {} ", *byte as char)
 			} else {
 				match byte {
 							0   => "NUL",
@@ -884,15 +884,15 @@ macro_rules! safe_view_mem  {
 macro_rules! view_mem {
     ($var: expr) => {
         // Get the size of the variable
-        let size = std::mem::size_of_val(&$var);
+        // let size = std::mem::size_of_val(&$var);
 
         // Print metadata of var: var_name, size, type, separated by a new line for each meta
         println!("Name: {}", stringify!($var));
         _print_type_of(&$var);
         println!("Addr: {:016x}", &$var as *const _ as *const u8 as usize);
-        println!("Size: {} bytes", size);
+        println!("Size: {} bytes", std::mem::size_of_val(&$var));
 
-        _show_memory_content(&$var as *const _ as *const u8, size);
+        _show_memory_content(&$var as *const _ as *const u8, std::mem::size_of_val(&$var));
     };
 }
 
@@ -931,67 +931,57 @@ pub fn _print_type_of<T>(_: T) {
 pub fn _show_memory_content(src_ptr: *const u8, len: usize) { // This supposed to be private usage.
     // Display the memory and its value for every byte from src_ptr to src_ptr + len
 
-    let mut ascii_display = String::with_capacity(3);
     let mut ptr: *const u8 = src_ptr;
-    let mut value: u8;
-
     let end: *const u8 = unsafe { src_ptr.add(len) };
 
     println!("     Address      | Hex | Dec |    Bin   | ASCII");
     println!("-----------------Memory Content-----------------");
     while ptr < end {
-        value = unsafe {*ptr};
+        let byte = unsafe {*ptr};
 
-        print!(" {:016x} | {:02x}  | {:03} | {:08b} |", ptr as usize, value as usize, value as usize, value as usize);
+        let ascii = if byte.is_ascii_graphic() {
+            format!(" {} ", byte as char)
+        } else {
+            match byte {
+                0   => "NUL",
+                1   => "SOH",
+                2   => "STX",
+                3   => "ETX",
+                4   => "EOT",
+                5   => "ENQ",
+                6   => "ACK",
+                7   => "BEL",
+                8   => "BS ",
+                9   => "HT ",
+                10  => "LF ",
+                11  => "VT ",
+                12  => "FF ",
+                13  => "CR ",
+                14  => "SO ",
+                15  => "SI ",
+                16  => "DLE",
+                17  => "DC1",
+                18  => "DC2",
+                19  => "DC3",
+                20  => "DC4",
+                21  => "NAK",
+                22  => "SYN",
+                23  => "ETB",
+                24  => "CAN",
+                25  => "EM ",
+                26  => "SUB",
+                27  => "ESC",
+                28  => "FS ",
+                29  => "GS ",
+                30  => "RS ",
+                31  => "US ",
+                32  => "SPC",
+                127 => "DEL",
+                _   => "...",
+            }.to_string()
+        };
 
-        ascii_display = "...".to_string(); // Not ASCII
-
-        if value.is_ascii() {
-            if value.is_ascii_graphic() { // Graphic ASCII
-                ascii_display = (value as char).to_string();
-            } else {
-                ascii_display = match value { // Non-graphic ASCII
-                    0   => "NUL",
-                    1   => "SOH",
-                    2   => "STX",
-                    3   => "ETX",
-                    4   => "EOT",
-                    5   => "ENQ",
-                    6   => "ACK",
-                    7   => "BEL",
-                    8   => "BS ",
-                    9   => "HT ",
-                    10  => "LF ",
-                    11  => "VT ",
-                    12  => "FF ",
-                    13  => "CR ",
-                    14  => "SO ",
-                    15  => "SI ",
-                    16  => "DLE",
-                    17  => "DC1",
-                    18  => "DC2",
-                    19  => "DC3",
-                    20  => "DC4",
-                    21  => "NAK",
-                    22  => "SYN",
-                    23  => "ETB",
-                    24  => "CAN",
-                    25  => "EM ",
-                    26  => "SUB",
-                    27  => "ESC",
-                    28  => "FS ",
-                    29  => "GS ",
-                    30  => "RS ",
-                    31  => "US ",
-                    32  => "SPC",
-                    127 => "DEL",
-                    _   => "...",
-                }
-                .to_string()
-            }
-        }
-
-        println!("  {}", ascii_display);
+        println!(" {:016x} | {:02x}  | {:03} | {:08b} |  {}", ptr as usize, byte as u8, byte as u8, byte as u8, ascii);
 
         ptr = unsafe { ptr.add(1) };
     }
